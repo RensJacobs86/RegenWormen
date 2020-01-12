@@ -1,12 +1,12 @@
 import random
 
 dice = ["1", "2", "3", "4", "5", "Worm"]
-board = [[21, 1], [22, 1], [23, 1], [24, 1], [25, 2], [26, 2], [27, 2], [28, 2], [29, 3], [30, 3], [31, 3], [32, 3], [33, 4], [34, 4], [35, 4], [36, 4]]
+board = {21: 1, 22: 1, 23: 1, 24: 1, 25: 2, 26: 2, 27: 2, 28: 2, 29: 3, 30: 3, 31: 3, 32: 3, 33: 4, 34: 4, 35: 4, 36: 4}
 
 def dice_roll():
     num_dice = 8
     hand_die = []
-    hand_stone = []
+    hand_stone = {}
 
 
     while num_dice > 0:
@@ -43,7 +43,7 @@ def dice_roll():
         print(hand_die)
         print(f"You have {num_dice} dices left")
 
-        #loop to count the total points in hand
+        #if statment to count the total points in hand
         for die in hand_die:
             if die == "1":
                 points += 1
@@ -60,6 +60,7 @@ def dice_roll():
 
         print(f"your total hand is worth {points} points")
 
+        #choice to continue throwing dices
         throw_again = input("Do you want to continue throwing? ")
         while throw_again != "yes" and throw_again != "no":
             print("invalid input, please select yes or no")
@@ -67,22 +68,29 @@ def dice_roll():
         if throw_again == "yes":
             continue
         else:
-            #ik moet met enumerate gaan werken
-            stone_choice = []
-            for index, worm in enumerate(board):
-                if points >= worm[0] and "Worm" in hand_die:
-                    stone_choice.append(worm)
+            #show selectable stones
+            stone_choice = {}
+            for worm_key, worm_value in board.items():
+                if points >= worm_key and "Worm" in hand_die:
+                    stone_choice[worm_key] = worm_value
             print("you can choose the following stones")
             print(stone_choice)
             stone_keep = input("Which stone do you want to keep? ")
-            #drama dict shit
-            while int(stone_keep) not in stone_choice[i][0]:
+
+            #loop to prevent wrong choice
+            while int(stone_keep) not in stone_choice.keys():
                 print("Invalid stone, please select another")
                 stone_keep = input("Which stone do you want to keep? ")
-            for stone in stone_choice:
-                if int(stone_keep) == stone[0]:
-                    hand_stone.append(stone)
-                    board.remove(stone)
+
+            #adding a stone to your hand
+            for worm_key, worm_value in board.items():
+                if worm_key == int(stone_keep):
+                    hand_stone[worm_key] = worm_value
+
+            #loop to remove the chosen stone from the board
+            for worm_key in hand_stone.keys():
+                if worm_key in board:
+                    del board[worm_key]
             print(f"this is your hand {hand_stone}")
             print("the following stones are left on the board")
             print(board)
