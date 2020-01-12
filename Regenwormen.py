@@ -43,7 +43,7 @@ def dice_roll():
         print(hand_die)
         print(f"You have {num_dice} dices left")
 
-        #if statment to count the total points in hand
+        #loop to count the total points in hand
         for die in hand_die:
             if die == "1":
                 points += 1
@@ -67,11 +67,14 @@ def dice_roll():
             throw_again = input("Do you want to continue throwing? ")
         if throw_again == "yes":
             continue
+        elif throw_again == "no" and "Worm" not in hand_die:
+            print("You lose, you have no Worms")
+            break
         else:
             #show selectable stones
             stone_choice = {}
             for worm_key, worm_value in board.items():
-                if points >= worm_key and "Worm" in hand_die:
+                if points >= worm_key:
                     stone_choice[worm_key] = worm_value
             print("you can choose the following stones")
             print(stone_choice)
